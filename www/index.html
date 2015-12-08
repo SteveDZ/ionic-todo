@@ -63,7 +63,6 @@
     </ion-side-menus>
 
     <script id="new-task.html" type="text/ng-template">
-
         <div class="modal">
 
             <!-- Modal header bar -->
@@ -85,7 +84,28 @@
                 </form>
             </ion-content>
         </div>
-
+    </script>
+    <script id="new-project.html" type="text/ng-template">
+        <div class="modal">
+            <!-- Modal header bar -->
+            <ion-header-bar class="bar-secondary">
+                <h1 class="title">New Project</h1>
+                <button class="button button-clear button-positive" ng-click="todoController.closeNewProject()">Cancel</button>
+            </ion-header-bar>
+            <!-- Modal content area -->
+            <ion-content>
+                <form ng-submit="todoController.createProject(project)">
+                    <div class="list">
+                        <label class="item item-input">
+                            <input type="text" placeholder="Project name" ng-model="project.title">
+                        </label>
+                    </div>
+                    <div class="padding">
+                        <button type="submit" class="button button-block button-positive">Create Project</button>
+                    </div>
+                </form>
+            </ion-content>
+        </div>
     </script>
 </body>
 </html>

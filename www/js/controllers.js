@@ -5,21 +5,37 @@ angular.module('todo.controllers', [])
 
     todoController.tasks = [];
 
+    $ionicModal.fromTemplateUrl('new-project.html', function(modal){
+        todoController.projectModal = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+    
+    $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
+        todoController.taskModal = modal;
+    },{
+        scope: $scope,
+        animation: 'slide-in-up'
+    });
+
     var createProject = function(projectTitle) {
         var newProject = Projects.newProject(projectTitle);
         todoController.projects.push(newProject);
         Projects.save(todoController.projects);
         todoController.selectProject(newProject, todoController.projects.length -1);
     };
+    
     todoController.projects = Projects.all();
     todoController.activeProject = todoController.projects[Projects.getLastActiveIndex()];
 
     todoController.newProject = function() {
-        var projectTitle = prompt('Project name');
-        if(projectTitle) {
-            createProject(projectTitle);
-        }
+        todoController.projectModal.show();
     };
+    
+    todoController.closeNewProject = function() {
+        todoController.projectModal.hide();
+    }
 
     todoController.selectProject = function(project, index) {
         todoController.activeProject = project;
@@ -27,12 +43,12 @@ angular.module('todo.controllers', [])
         $ionicSideMenuDelegate.toggleLeft(false);
     };
 
-    $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
-        todoController.taskModal = modal;
-    },{
-        scope: $scope,
-        animation: 'slide-in-up'
-    });
+    todoController.createProject = function(project) {
+        createProject(project.title);
+        
+        todoController.projectModal.hide();
+        project.title = "";
+    };
 
     todoController.createTask = function(task){
         if(!todoController.activeProject || !task) {
@@ -60,17 +76,4 @@ angular.module('todo.controllers', [])
     todoController.toggleProjects = function() {
         $ionicSideMenuDelegate.toggleLeft();
     };
-
-    $timeout(function() {
-        if(todoController.projects.length == 0) {
-            while(true) {
-                var projectTitle = prompt('Your first project title:');
-
-                if(projectTitle) {
-                    createProject(projectTitle);
-                    break;
-                }
-            }
-        }
-    });
 });
