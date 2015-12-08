@@ -1,19 +1,19 @@
 angular.module('todo.controllers', [])
 
 .controller('TodoCtrl', function($scope, $timeout, $ionicModal, $ionicSideMenuDelegate, Projects) {
-    var todoController = this;
+    //var todoController = this;
 
-    todoController.tasks = [];
+    $scope.tasks = [];
 
     $ionicModal.fromTemplateUrl('new-project.html', function(modal){
-        todoController.projectModal = modal;
+        $scope.projectModal = modal;
     }, {
         scope: $scope,
         animation: 'slide-in-up'
     });
     
     $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
-        todoController.taskModal = modal;
+        $scope.taskModal = modal;
     },{
         scope: $scope,
         animation: 'slide-in-up'
@@ -21,59 +21,59 @@ angular.module('todo.controllers', [])
 
     var createProject = function(projectTitle) {
         var newProject = Projects.newProject(projectTitle);
-        todoController.projects.push(newProject);
-        Projects.save(todoController.projects);
-        todoController.selectProject(newProject, todoController.projects.length -1);
+        $scope.projects.push(newProject);
+        Projects.save($scope.projects);
+        $scope.selectProject(newProject, $scope.projects.length -1);
     };
     
-    todoController.projects = Projects.all();
-    todoController.activeProject = todoController.projects[Projects.getLastActiveIndex()];
+    $scope.projects = Projects.all();
+    $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
 
-    todoController.newProject = function() {
-        todoController.projectModal.show();
+    $scope.newProject = function() {
+        $scope.projectModal.show();
     };
     
-    todoController.closeNewProject = function() {
-        todoController.projectModal.hide();
+    $scope.closeNewProject = function() {
+        $scope.projectModal.hide();
     }
 
-    todoController.selectProject = function(project, index) {
-        todoController.activeProject = project;
+    $scope.selectProject = function(project, index) {
+        $scope.activeProject = project;
         Projects.setLastActiveIndex(index);
         $ionicSideMenuDelegate.toggleLeft(false);
     };
 
-    todoController.createProject = function(project) {
+    $scope.createProject = function(project) {
         createProject(project.title);
         
-        todoController.projectModal.hide();
+        $scope.projectModal.hide();
         project.title = "";
     };
 
-    todoController.createTask = function(task){
-        if(!todoController.activeProject || !task) {
+    $scope.createTask = function(task){
+        if(!$scope.activeProject || !task) {
             return;
         }
 
-        todoController.activeProject.tasks.push({
+        $scope.activeProject.tasks.push({
             title: task.title
         });
 
-        todoController.taskModal.hide();
+        $scope.taskModal.hide();
         task.title = "";
 
-        Projects.save(todoController.projects);
+        Projects.save($scope.projects);
     };
 
-    todoController.newTask = function() {
-        todoController.taskModal.show();
+    $scope.newTask = function() {
+        $scope.taskModal.show();
     };
 
-    todoController.closeNewTask = function() {
-        todoController.taskModal.hide();
+    $scope.closeNewTask = function() {
+        $scope.taskModal.hide();
     };
 
-    todoController.toggleProjects = function() {
+    $scope.toggleProjects = function() {
         $ionicSideMenuDelegate.toggleLeft();
     };
 });
