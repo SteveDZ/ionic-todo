@@ -1,6 +1,6 @@
 angular.module('todo.controllers', [])
 
-.controller('TodoCtrl', function($scope, $timeout, $ionicModal, $ionicSideMenuDelegate, Projects) {
+.controller('TodoCtrl', function($scope, $timeout, $ionicModal, $ionicSideMenuDelegate, Projects, $cordovaCamera, $ionicPlatform) {
     //var todoController = this;
 
     $scope.tasks = [];
@@ -25,7 +25,7 @@ angular.module('todo.controllers', [])
         Projects.save($scope.projects);
         $scope.selectProject(newProject, $scope.projects.length -1);
     };
-    
+
     $scope.projects = Projects.all();
     $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
 
@@ -76,4 +76,27 @@ angular.module('todo.controllers', [])
     $scope.toggleProjects = function() {
         $ionicSideMenuDelegate.toggleLeft();
     };
+    
+    
+    $scope.takePicture = function() {
+        var options = { 
+            quality : 100, 
+            destinationType : Camera.DestinationType.DATA_URL, 
+            sourceType : Camera.PictureSourceType.CAMERA, 
+            allowEdit : true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 340,
+            targetHeight: 340,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+        
+        $ionicPlatform.ready(function() {
+            $cordovaCamera.getPicture(options).then(function(imageData) {
+                $scope.imgURI = "data:image/jpeg;base64," + imageData;
+            }, function(err) {
+                // error
+            });
+        });
+    }
 });

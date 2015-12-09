@@ -13,6 +13,7 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -77,6 +78,10 @@
                         <label class="item item-input">
                             <input type="text" placeholder="What do you need to do?" ng-model="task.title">
                         </label>
+                    </div>
+                    <div class="padding">
+                        <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}">
+                        <button class="button button-block button-positive" ng-click="takePicture()">Take picture</button>
                     </div>
                     <div class="padding">
                         <button type="submit" class="button button-block button-positive">Create Task</button>
